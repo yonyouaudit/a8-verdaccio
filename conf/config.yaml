@@ -1,0 +1,32 @@
+storage: /verdaccio/storage/data
+auth:
+  htpasswd:
+    file: /verdaccio/storage/htpasswd
+uplinks:
+  npmjs:
+    url: https://registry.npm.taobao.org
+    #url: https://registry.npmjs.org/
+    maxage: 10m
+    timeout: 30s
+    max_fails: 5
+    fail_timeout: 10m
+    cache: true
+
+
+packages:
+  '@*/*':
+    access: $all
+    publish: $authenticated
+    proxy: npmjs
+  '**':
+    access: $all
+    publish: $authenticated
+    proxy: npmjs
+logs:
+  - {type: stdout, format: pretty, level: http}
+
+
+web:
+  enable: true
+  title: Yonyou-Audit NPM Repository 
+  logo: https://www.yonyouaud.com/cloud/images/icon-white.png
