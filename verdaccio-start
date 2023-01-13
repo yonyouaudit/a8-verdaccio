@@ -3,8 +3,9 @@ import os
 import sys
 import subprocess
 
-data_dir = './storage/data'
-db_json_file = './storage/data/.verdaccio-db.json'
+current_dir = os. getcwd()
+data_dir = current_dir + '/storage/data'
+db_json_file = current_dir + '/storage/data/.verdaccio-db.json'
 
 # must start this script with sudoer
 if os.geteuid() != 0:
@@ -14,7 +15,7 @@ if os.geteuid() != 0:
 # build .verdaccio-db.json file
 result = []
 
-for root, dirs, files in os.walk("./storage/data"):
+for root, dirs, files in os.walk(data_dir):
     for dir in dirs:
         result.append('"' + dir + '"')
 
@@ -26,6 +27,9 @@ new_db_json = new_db_json + ','.join(result) + '],"secret":"849cfbddc086052d0604
 with open(db_json_file, "w") as file:
     # write string to the file
     file.write(new_db_json)
+
+# change file attribute
+os.chmod(db_json_file, 0o0777)
 
 # start docker-compose
 
